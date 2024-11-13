@@ -25,6 +25,8 @@ struct MissionView: View {
                     .containerRelativeFrame(.horizontal) { width, axis in
                         width * 0.6
                     }
+                Text(mission.formattedLaunchDate)
+                    .font(.headline.bold())
                     .padding(.top)
                 
                 VStack(alignment: .leading) {
