@@ -105,7 +105,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
+            Group {
                 // Conditionally render Grid or List view based on isGridView state
                 if isGridView {
                     MissionGridView(missions: missions, astronauts: astronauts)
