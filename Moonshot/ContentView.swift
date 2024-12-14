@@ -14,40 +14,45 @@ struct MissionGridView: View {
     let columns = [GridItem(.adaptive(minimum: 150))]
     
     var body: some View {
-        LazyVGrid(columns: columns) {
-            ForEach(missions) { mission in
-                NavigationLink {
-                    MissionView(mission: mission, astronauts: astronauts)
-                } label: {
-                    VStack {
-                        Image(mission.image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 100)
-                            .padding()
-                        
+        ScrollView {  // Wrapping the grid in a ScrollView to make it scrollable
+            LazyVGrid(columns: columns, spacing: 20) {
+                ForEach(missions) { mission in
+                    NavigationLink {
+                        MissionView(mission: mission, astronauts: astronauts)
+                    } label: {
                         VStack {
-                            Text(mission.displayName)
-                                .font(.headline)
-                                .foregroundStyle(.white)
+                            Image(mission.image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100, height: 100)
+                                .padding()
                             
-                            Text(mission.formattedLaunchDate)
-                                .font(.caption)
-                                .foregroundStyle(.white.opacity(0.5))
+                            VStack {
+                                Text(mission.displayName)
+                                    .font(.headline)
+                                    .foregroundStyle(.white)
+                                
+                                Text(mission.formattedLaunchDate)
+                                    .font(.caption)
+                                    .foregroundStyle(.white.opacity(0.5))
+                            }
+                            .padding(.vertical)
+                            .frame(maxWidth: .infinity)
+                            .background(.lightBackground)
                         }
-                        .padding(.vertical)
-                        .frame(maxWidth: .infinity)
-                        .background(.lightBackground)
+                        .clipShape(.rect(cornerRadius: 10))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.lightBackground)
+                        )
                     }
-                    .clipShape(.rect(cornerRadius: 10))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(.lightBackground)
-                    )
                 }
             }
+            .padding([.horizontal, .bottom])
         }
-        .padding([.horizontal, .bottom])
+        .background(.darkBackground)
+        .cornerRadius(20)  // Optional: to add rounded corners if desired
+        .padding(.top, 10)  // Add some top padding to avoid overlap with the navigation bar
     }
 }
 
@@ -87,25 +92,20 @@ struct MissionListView: View {
                 )
             }
         }
-        .listStyle(.plain)  // Optional: Use plain style to remove default list styling
+        .listStyle(.plain)
+        .padding(.top, 10)  // Adding padding to avoid overlap with the navigation bar
     }
 }
-
-import SwiftUI
 
 struct ContentView: View {
     let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json")
     let missions: [Mission] = Bundle.main.decode("missions.json")
     
-    let columns = [
-        GridItem(.adaptive(minimum: 150))
-    ]
-    
     @State private var isGridView: Bool = true  // Track the current view type
     
     var body: some View {
         NavigationStack {
-            Group {
+            VStack {
                 // Conditionally render Grid or List view based on isGridView state
                 if isGridView {
                     MissionGridView(missions: missions, astronauts: astronauts)
