@@ -82,6 +82,9 @@ struct MissionListView: View {
                             .font(.caption)
                             .foregroundStyle(.white.opacity(0.5))
                     }
+                    .padding(.vertical)
+                    .frame(maxWidth: .infinity)
+                    .background(.lightBackground)
                 }
                 .padding(.vertical)
                 .background(.lightBackground)
